@@ -14,7 +14,38 @@ public class Build {
    * @param k the maximum word length (exclusive)
    */
   public static void printShortWords(Vertex<String> vertex, int k) {
+    if(vertex == null) return;
+
+    Set<Vertex<String>> visited = new HashSet<>();
+
+    StringBuilder shortestWord = new StringBuilder();
+    printShortWordsHelper(vertex, k, visited, shortestWord);
+
+    System.out.println(shortestWord.toString().trim());
   }
+
+  public static StringBuilder printShortWordsHelper(Vertex<String> vertex, int k, Set<Vertex<String>> visited, StringBuilder shortestWord) {
+    if(vertex == null|| visited.contains(vertex)) return shortestWord;
+
+    visited.add(vertex);
+
+    if(k > vertex.data.length()){
+      shortestWord.append(vertex.data).append(" ");
+      
+    }
+
+
+    for(var next : vertex.neighbors){
+
+      printShortWordsHelper(next, k, visited, shortestWord);
+    }
+
+    
+
+
+    return shortestWord;
+  }
+
 
   /**
    * Returns the longest word reachable from the given vertex, including its own value.
@@ -23,8 +54,41 @@ public class Build {
    * @return the longest reachable word, or an empty string if the vertex is null
    */
   public static String longestWord(Vertex<String> vertex) {
-    return "";
+    if(vertex == null) return "";
+
+    Set<Vertex<String>> visited = new HashSet<>();
+
+    
+    String longestWord = longestWordHelper(vertex, visited, "");
+
+    return longestWord;
+
   }
+
+  public static String longestWordHelper(Vertex<String> vertex, Set<Vertex<String>> visited, String longestWord) {
+    if(vertex == null || visited.contains(vertex)) return longestWord;
+    
+    visited.add(vertex);
+
+
+    if(vertex.data.length() > longestWord.length()){
+      longestWord = vertex.data;
+    }
+
+    for (Vertex<String> next : vertex.neighbors) {
+        String candidate = longestWordHelper(next, visited, longestWord);
+        if (candidate.length() > longestWord.length()) {
+            longestWord = candidate;
+        }
+    }
+
+    return longestWord;
+
+    
+
+
+  }
+
 
   /**
    * Prints the values of all vertices that are reachable from the given vertex and 
