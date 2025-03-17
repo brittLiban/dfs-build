@@ -98,6 +98,29 @@ public class Build {
    * @param <T> the type of values stored in the vertices
    */
   public static <T> void printSelfLoopers(Vertex<T> vertex) {
+    
+    //do this by checking if the nodes inside neighbors visited already contain what were checking - this qualifies as self looping
+    Set<Vertex<T>> visited = new HashSet<>();
+    printSelfLoopersHelper(vertex, visited);
+
+
+  }
+
+  public static <T> void printSelfLoopersHelper(Vertex<T> vertex, Set<Vertex<T>> visited) {
+    if(vertex == null || visited.contains(vertex)) return;
+
+    visited.add(vertex);
+
+    //check if any of its neighbors contain its nodes
+    if(vertex.neighbors.contains(vertex)){
+      System.out.println(vertex.data);
+    }
+
+    for(var neighbor : vertex.neighbors){
+      printSelfLoopersHelper(neighbor, visited);;
+    }
+
+
   }
 
   /**
