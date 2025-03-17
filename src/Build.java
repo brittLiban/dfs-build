@@ -132,7 +132,38 @@ public class Build {
    * @return true if the destination is reachable from the start, false otherwise
    */
   public static boolean canReach(Airport start, Airport destination) {
+    
+
+   if(start == null || destination == null) return false;  
+
+   Set<Airport> visited = new HashSet<>();
+
+   return canReachHelper(start, destination, visited);
+
+   
+  }
+
+  public static boolean canReachHelper(Airport start, Airport destination, Set<Airport> visited){
+    if(start == null || destination == null || visited.contains(start)) return false;
+
+
+    visited.add(start);
+
+    if(start.getName().equals(destination.getName())){
+      return true;
+    }
+
+    for(var otherFlights : start.getOutboundFlights()){
+      if(canReachHelper(otherFlights, destination, visited)){
+
+       return true; 
+      }
+      
+    }
+  
     return false;
+   
+
   }
 
   /**
@@ -145,6 +176,9 @@ public class Build {
    * @return a set of values that cannot be reached from the starting value
    */
   public static <T> Set<T> unreachable(Map<T, List<T>> graph, T starting) {
+    if(starting == null) return new HashSet<>();
+
+    
     return new HashSet<>();
   }
 }
